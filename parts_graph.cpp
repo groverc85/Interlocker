@@ -70,7 +70,7 @@ void Graph::printLIGs() {
 }
 
 // test conditions like D(P1, P2) \ D(P1, P8) \ D(P1, P3)
-// check to see if all these joints con- sistently allow d(k1) as the free axial direction to move k1 out of the assembly.
+// check to see if all these joints consistently allow d(k1) as the free axial direction to move k1 out of the assembly.
 int Graph::helper_union(int index) {
     // get the axis connection status with all the rest
     
@@ -165,7 +165,6 @@ void Graph::constructG1() {
             // 3-node cycle case
             tmp.push_back(k1);
             tmp.push_back(k1_connection[i]);
-            tmp.push_back(k1_connection[j]);
             
             // find intersaction between i node and j node
             for (int k = 0; k < vertexCount; k++) {
@@ -175,18 +174,53 @@ void Graph::constructG1() {
                     tmp.push_back(k);
                 }
             }
-            //
+            
+            // make sure it's in connecting order
+            tmp.push_back(k1_connection[j]);
+            
             k1_cycles.push_back(tmp);
         }
     }
 }
 
 void Graph::assemblyVerify() {
+    // impossible to verify assembly in first LIG, paper lied!
+    // we need to pick up one situation for LIG manually.
+    
+    
+    
+    
+    // After construction of G1, reset removal axis to xyz since G1 would be removed when we start removing G2.
+    for (int cycle_vertex = 0; cycle_vertex < k1_cycle.size(); cycle_vertex++) {
+        for (int i = 0; i < vertexCount; i++) {
+            // cycle_vertex is connecting with i vertex
+            if (connection[cycle_vertex][i] != false) {
+                // reset removal axis freedom
+                for (int k = 0; k < 3; k++) {
+                    connection_axis[cycle_vertex][i][k] = true;
+                    connection_axis[i][cycle_vertex][k] = true;
+                }
+            }
+        }
+    }
+}
+
+void Graph::identifyGN() {
+    
+    for (int i = 0; i < k1_cycle.size(); i++) {
+        if (k1_cycle[i] != k1 && helper_union(k1_cycle[i]) != NO_AXIS) {
+            kN.push_back(i);
+            directionN.push_back(helper_union(k1_cycle[i]));
+            break;
+        }
+    }
     
 }
 
 
-
+void Graph::constructGN() {
+    
+}
 
 
 
