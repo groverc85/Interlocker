@@ -206,20 +206,50 @@ void Graph::assemblyVerify() {
 }
 
 void Graph::identifyGN() {
-    
     for (int i = 0; i < k1_cycle.size(); i++) {
+        // it's not local key of previous cycle and it can serve as a local key
         if (k1_cycle[i] != k1 && helper_union(k1_cycle[i]) != NO_AXIS) {
-            kN.push_back(i);
+            kN.push_back(k1_cycle[i]);
             directionN.push_back(helper_union(k1_cycle[i]));
             break;
         }
     }
-    
 }
 
-
-void Graph::constructGN() {
+// N = LIG #, starting from 2
+void Graph::constructGN(int N) {
+    // kN_connection contains nodes that are connected to key kN
+    vector<int> kN_connection;
     
+    for (int i = 0; i < vertexCount; i++) {
+        if (connection[kN[N-2]][i] == true)
+            kN_connection.push_back(i);
+    }
+    
+    // kN_connection.size() must be equal or great than 2
+    for (int i = 0; i < kN_connection.size(); i++) {
+        for (int j = i+1; j < kN_connection.size(); j++) {
+            vector<int> tmp;
+            // 3-node cycle case
+            tmp.push_back(kN[N-2]);
+            tmp.push_back(kN_connection[i]);
+            
+            // find intersaction between i node and j node
+            for (int k = 0; k < vertexCount; k++) {
+                // 4-node cycle case
+                if (connection[kN_connection[i]][k] == true && connection[kN_connection[j]][k] == true && k != kN[N-2]) {
+                    // kN, kN_connection[i], kN_connection[j], k would form a cycle
+                    tmp.push_back(k);
+                }
+            }
+            
+            // make sure it's in connecting order
+            tmp.push_back(kN_connection[j]);
+            
+            kN_cycles.push_back(tmp);
+        }
+    }
+
 }
 
 

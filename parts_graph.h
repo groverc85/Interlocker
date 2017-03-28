@@ -44,9 +44,9 @@ private:
     int direction;
     vector<vector<int>> k1_cycles; // cycles that contain key k1 in the parts-graph
     vector<int> k1_cycle; // first LIG
-    vector<int> kN;
-    vector<int> directionN;
-    
+    vector<int> kN; // keys for LIGs after the first one
+    vector<int> directionN; // directions for LIGs after the first one
+    vector<vector<int>> kN_cycles;
 
 public:
     Graph(int V);   // Constructor
@@ -64,5 +64,5 @@ public:
     void constructG1();
     void assemblyVerify();
     void identifyGN();
-    void constructGN();
+    void constructGN(int N);
 };
