@@ -15,6 +15,7 @@ int main(int argc, const char * argv[]) {
     // create furniture model of Figure 3 in the paper
     Graph chair(6);
     
+    chair.setName("chair");
     chair.addEdge(0, 1, Y);
     chair.addEdge(0, 3, Y);
     chair.addEdge(1, 2, X);
@@ -36,6 +37,34 @@ int main(int argc, const char * argv[]) {
     tmp.clear();
     
     chair.printLIGs();
+    
+    Graph bookShelf(12);
+    
+    bookShelf.setName("bookShelf");
+    bookShelf.addEdge(0, 1, Z);
+    bookShelf.addEdge(0, 2, Z);
+    bookShelf.addEdge(0, 7, Z);
+    bookShelf.addEdge(1, 3, X);
+    bookShelf.addEdge(1, 4, Y);
+    bookShelf.addEdge(1, 6, Z);
+    bookShelf.addEdge(1, 12, X);
+    bookShelf.addEdge(2, 3, Z);
+    bookShelf.addEdge(2, 4, Z);
+    bookShelf.addEdge(2, 5, Y);
+    bookShelf.addEdge(2, 11, Z);
+    bookShelf.addEdge(3, 9, Y);
+    bookShelf.addEdge(4, 8, X);
+    bookShelf.addEdge(4, 10, Y);
+    bookShelf.addEdge(5, 7, X);
+    bookShelf.addEdge(5, 8, Y);
+    bookShelf.addEdge(6, 7, X);
+    bookShelf.addEdge(6, 8, Z);
+    bookShelf.addEdge(9, 11, X);
+    bookShelf.addEdge(9, 12, Z);
+    bookShelf.addEdge(10, 11, Y);
+    bookShelf.addEdge(10, 12, Z);
+    
+    
     
     
     

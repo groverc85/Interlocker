@@ -29,6 +29,8 @@ class Graph
 private:
     int vertexCount;    // No. of vertices
     
+    string name; // Name of the furniture
+    
     // show connection status
     bool ** connection;
     
@@ -46,7 +48,7 @@ private:
     vector<int> k1_cycle; // first LIG
     vector<int> kN; // keys for LIGs after the first one
     vector<int> directionN; // directions for LIGs after the first one
-    vector<vector<int>> kN_cycles;
+    vector<vector<int>> kN_cycles; // cycles that contain key kN in the parts-graph
 
 public:
     Graph(int V);   // Constructor
@@ -55,6 +57,7 @@ public:
     void removeEdge(int v, int w); // to remove an edge of graph
     void setLIGs(std::vector<int>);
     void printLIGs();
+    void setName(string name);
     
     // Helper function
     int helper_union(int index);
@@ -65,4 +68,5 @@ public:
     void assemblyVerify();
     void identifyGN();
     void constructGN(int N);
+    void assemblyVerifyGN();
 };

@@ -32,7 +32,6 @@ void Graph::addEdge(int v, int w, int direction) {
         connection[w][v] = true;
         connection_axis[v][w][direction] = true;
         connection_axis[w][v][direction] = true;
-        
     }
 }
 
@@ -56,6 +55,10 @@ Graph::~Graph() {
 
 void Graph::setLIGs(std::vector<int> cycle) {
     cycles.push_back(cycle);
+}
+
+void Graph::setName(string name) {
+    this->name = name;
 }
 
 void Graph::printLIGs() {
@@ -146,6 +149,9 @@ void Graph::confirmK1() {
         cout << "You cannot start from here, please select again\n";
         confirmK1();
     }
+    
+    if (name == "chair")
+        firstKey = 0;
 }
 
 
@@ -184,7 +190,7 @@ void Graph::constructG1() {
 }
 
 void Graph::assemblyVerify() {
-    // impossible to verify assembly in first LIG, paper lied!
+    // impossible to verify assembly in first LIG
     // we need to pick up one situation for LIG manually.
     
     
@@ -216,7 +222,7 @@ void Graph::identifyGN() {
     }
 }
 
-// N = LIG #, starting from 2
+// N = LIG #, starting from 2, N=2 current case
 void Graph::constructGN(int N) {
     // kN_connection contains nodes that are connected to key kN
     vector<int> kN_connection;
@@ -252,6 +258,28 @@ void Graph::constructGN(int N) {
 
 }
 
+
+void Graph::assemblyVerifyGN() {
+    // impossible to verify assembly in LIG
+    // we need to pick up one situation for LIG manually.
+    
+    
+    
+    
+    // After construction of G1, reset removal axis to xyz since G1 would be removed when we start removing G2.
+    for (int cycle_vertex = 0; cycle_vertex < k1_cycle.size(); cycle_vertex++) {
+        for (int i = 0; i < vertexCount; i++) {
+            // cycle_vertex is connecting with i vertex
+            if (connection[cycle_vertex][i] != false) {
+                // reset removal axis freedom
+                for (int k = 0; k < 3; k++) {
+                    connection_axis[cycle_vertex][i][k] = true;
+                    connection_axis[i][cycle_vertex][k] = true;
+                }
+            }
+        }
+    }
+}
 
 
 
