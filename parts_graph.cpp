@@ -61,17 +61,6 @@ void Graph::setName(string name) {
     this->name = name;
 }
 
-void Graph::printLIGs() {
-    for (int i = 0; i < cycles.size(); i++)
-    {
-        for (int j = 0; j < cycles[i].size(); j++)
-        {
-            printf("%d ", cycles[i][j]);
-        }
-        printf("\n");
-    }
-}
-
 // test conditions like D(P1, P2) \ D(P1, P8) \ D(P1, P3)
 // check to see if all these joints consistently allow d(k1) as the free axial direction to move k1 out of the assembly.
 int Graph::helper_union(int index) {
@@ -150,8 +139,15 @@ void Graph::confirmK1() {
         confirmK1();
     }
     
-    if (name == "chair")
+    if (name == "chair") {
         firstKey = 0;
+        direction = Y;
+    }
+    else if (name == "bookShelf") {
+        firstKey = 0;
+        direction = Z;
+    }
+    
 }
 
 
@@ -185,6 +181,8 @@ void Graph::constructG1() {
             tmp.push_back(k1_connection[j]);
             
             k1_cycles.push_back(tmp);
+
+                
         }
     }
 }
@@ -193,7 +191,15 @@ void Graph::assemblyVerify() {
     // impossible to verify assembly in first LIG
     // we need to pick up one situation for LIG manually.
     
+    if (name == "chair") {
+        k1_cycle.push_back(0);k1_cycle.push_back(1);
+        k1_cycle.push_back(2);k1_cycle.push_back(3);
+    }
     
+    else if (name == "bookShelf") {
+        k1_cycle.push_back(0);k1_cycle.push_back(2);
+        k1_cycle.push_back(5);k1_cycle.push_back(7);
+    }
     
     
     // After construction of G1, reset removal axis to xyz since G1 would be removed when we start removing G2.
@@ -263,8 +269,68 @@ void Graph::assemblyVerifyGN() {
     // impossible to verify assembly in LIG
     // we need to pick up one situation for LIG manually.
     
+    if (name == "chair") {
+        vector<int> chair_tmp;
+        chair_tmp.push_back(1);chair_tmp.push_back(2);
+        chair_tmp.push_back(3);chair_tmp.push_back(4);
+        kN_cycle.push_back(chair_tmp);
+        chair_tmp.clear();
+        chair_tmp.push_back(1);chair_tmp.push_back(4);
+        chair_tmp.push_back(5);
+        kN_cycle.push_back(chair_tmp);
+        
+        kN.push_back(1);
+        kN.push_back(2);
+        
+        order.push_back(5);order.push_back(1);order.push_back(4);
+        order.push_back(2);order.push_back(3);order.push_back(0);
+        
+    }
     
-    
+    else if (name == "bookShelf") {
+        vector<int> bookShelf_tmp;
+        bookShelf_tmp.push_back(1);bookShelf_tmp.push_back(2);
+        bookShelf_tmp.push_back(3);bookShelf_tmp.push_back(4);
+        kN_cycle.push_back(bookShelf_tmp);
+        bookShelf_tmp.clear();
+        bookShelf_tmp.push_back(5);bookShelf_tmp.push_back(6);
+        bookShelf_tmp.push_back(7);bookShelf_tmp.push_back(8);
+        kN_cycle.push_back(bookShelf_tmp);
+        bookShelf_tmp.clear();
+        bookShelf_tmp.push_back(2);bookShelf_tmp.push_back(4);
+        bookShelf_tmp.push_back(5);bookShelf_tmp.push_back(8);
+        kN_cycle.push_back(bookShelf_tmp);
+        bookShelf_tmp.clear();
+        bookShelf_tmp.push_back(2);bookShelf_tmp.push_back(3);
+        bookShelf_tmp.push_back(9);bookShelf_tmp.push_back(11);
+        kN_cycle.push_back(bookShelf_tmp);
+        bookShelf_tmp.clear();
+        bookShelf_tmp.push_back(1);bookShelf_tmp.push_back(4);
+        bookShelf_tmp.push_back(10);bookShelf_tmp.push_back(12);
+        kN_cycle.push_back(bookShelf_tmp);
+        bookShelf_tmp.clear();
+        bookShelf_tmp.push_back(1);bookShelf_tmp.push_back(3);
+        bookShelf_tmp.push_back(9);bookShelf_tmp.push_back(12);
+        kN_cycle.push_back(bookShelf_tmp);
+        bookShelf_tmp.clear();
+        bookShelf_tmp.push_back(9);bookShelf_tmp.push_back(10);
+        bookShelf_tmp.push_back(11);bookShelf_tmp.push_back(12);
+        kN_cycle.push_back(bookShelf_tmp);
+        
+        kN.push_back(8);
+        kN.push_back(5);
+        kN.push_back(2);
+        kN.push_back(4);
+        kN.push_back(1);
+        kN.push_back(12);
+        
+        order.push_back(11);order.push_back(10);order.push_back(9);
+        order.push_back(12);order.push_back(3);order.push_back(1);
+        order.push_back(4);order.push_back(2);order.push_back(8);
+        order.push_back(5);order.push_back(6);order.push_back(7);
+        order.push_back(0);
+    }
+
     
     // After construction of G1, reset removal axis to xyz since G1 would be removed when we start removing G2.
     for (int cycle_vertex = 0; cycle_vertex < k1_cycle.size(); cycle_vertex++) {
@@ -282,8 +348,39 @@ void Graph::assemblyVerifyGN() {
 }
 
 
+void Graph::printKeys() {
+    
+    cout << "Order of Keys for " << name << " is : \n";
+    cout << k1;
+    cout << " ";
+    for (int i = 0; i < kN.size(); i++)
+        cout << kN[i] << " ";
+    cout << "\n";
+}
+
+void Graph::printLIGs() {
+    
+    cout << "LIGs for " << name << " are : \n";
+    
+    for (int i = 0; i < k1_cycle.size(); i++)
+        cout << k1_cycle[i] << " ";
+    cout << "\n";
+    
+    for (int i = 0; i < kN_cycle.size(); i++) {
+        for (int j = 0; j < kN_cycle[i].size(); j++)
+            cout << kN_cycle[i][j] << " ";
+        cout << "\n";
+    }
+}
 
 
+void Graph::printOrder() {
+    
+    cout << "Correct order of assembly for " << name << " should be : \n";
+    for (int i = 0; i < order.size(); i++)
+        cout << order[i] << " ";
+    cout << "\n";
+}
 
 
 

@@ -13,6 +13,7 @@
 
 int main(int argc, const char * argv[]) {
     // create furniture model of Figure 3 in the paper
+    
     Graph chair(6);
     
     chair.setName("chair");
@@ -36,7 +37,17 @@ int main(int argc, const char * argv[]) {
     chair.setLIGs(tmp);
     tmp.clear();
     
-    chair.printLIGs();
+//    chair.confirmK1();
+//    chair.constructG1();
+    chair.assemblyVerify();
+    
+//    chair.identifyGN();
+//    for (int i = 2; i <= 3; i++)
+//        chair.constructGN(i);
+    chair.assemblyVerifyGN();
+
+    
+    
     
     Graph bookShelf(12);
     
@@ -64,9 +75,31 @@ int main(int argc, const char * argv[]) {
     bookShelf.addEdge(10, 11, Y);
     bookShelf.addEdge(10, 12, Z);
     
+//    bookShelf.confirmK1();
+//    bookShelf.constructG1();
+    bookShelf.assemblyVerify();
+    
+//    bookShelf.identifyGN();
+//    for (int i = 2; i <= 3; i++)
+//        bookShelf.constructGN(i);
+    bookShelf.assemblyVerifyGN();
     
     
+    cout << "Input the furniture type: " << "\n";
+    cout << "1 -- chair, 2 -- book shelf" << "\n";
+    int input;
+    cin >> input;
     
+    if (input == 1) {
+        chair.printKeys();
+        chair.printLIGs();
+        chair.printOrder();
+    }
+    if (input == 2) {
+        bookShelf.printKeys();
+        bookShelf.printLIGs();
+        bookShelf.printOrder();
+    }
     
     
     return 0;

@@ -39,16 +39,22 @@ private:
     bool *** connection_axis;  // Pointer to an array containing adjacency lists
     
     // vector stores cycles of a furniture parts-graph
-    std::vector<std::vector<int>> cycles;
+    std::vector<std::vector<int> > cycles;
     
-    // Parameters for first key
     int k1; // User input
-    int direction;
-    vector<vector<int>> k1_cycles; // cycles that contain key k1 in the parts-graph
-    vector<int> k1_cycle; // first LIG
     vector<int> kN; // keys for LIGs after the first one
+    
+    int direction;
     vector<int> directionN; // directions for LIGs after the first one
-    vector<vector<int>> kN_cycles; // cycles that contain key kN in the parts-graph
+
+    vector<vector<int> > k1_cycles; // cycles that contain key k1 in the parts-graph
+    vector<vector<int> > kN_cycles; // cycles that contain key kN in the parts-graph
+    
+    vector<int> k1_cycle; // first LIG
+    vector<vector<int> > kN_cycle; // LIGs after first LIG
+    
+    vector<int> order;
+
 
 public:
     Graph(int V);   // Constructor
@@ -56,7 +62,6 @@ public:
     void addEdge(int v, int w, int direction);   // to add an edge to graph
     void removeEdge(int v, int w); // to remove an edge of graph
     void setLIGs(std::vector<int>);
-    void printLIGs();
     void setName(string name);
     
     // Helper function
@@ -69,4 +74,8 @@ public:
     void identifyGN();
     void constructGN(int N);
     void assemblyVerifyGN();
+    
+    void printKeys();
+    void printLIGs();
+    void printOrder();
 };
